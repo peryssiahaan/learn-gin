@@ -1,6 +1,8 @@
 package database
 
 import (
+	"os"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
@@ -11,7 +13,7 @@ var db *gorm.DB
 
 func Init() error {
 	var err error
-	connectionString := "postgres://postgres.tsbxgkpukeamvfmhzkkr:ITB10215033@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
+	connectionString := os.Getenv("POSTGRES_CS")
 	db, err = gorm.Open(postgres.Open(connectionString), &gorm.Config{})
 	if err != nil {
 		return err

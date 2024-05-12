@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 
 	"gin-blog-app/database"
 	"gin-blog-app/handlers"
@@ -9,8 +10,12 @@ import (
 
 func main() {
 	gin.SetMode(gin.ReleaseMode)
-	err := database.Init()
-	if err != nil {
+
+	if err := godotenv.Load(); err != nil {
+		panic(err)
+	}
+
+	if err := database.Init(); err != nil {
 		panic(err)
 	}
 
