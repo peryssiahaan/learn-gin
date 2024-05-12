@@ -8,7 +8,6 @@ import (
 )
 
 func main() {
-	gin.SetMode(gin.ReleaseMode)
 
 	if err := database.Init(); err != nil {
 		panic(err)
