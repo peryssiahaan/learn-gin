@@ -17,6 +17,15 @@ func GetUsers() ([]models.User, error) {
 	return users, result.Error
 }
 
+func GetUserByEmail(email string) (*models.User, error) {
+	var user models.User
+	result := db.Where("email = ?", email).First(&user)
+	if result.Error == gorm.ErrRecordNotFound {
+		return nil, result.Error
+	}
+	return &user, result.Error
+}
+
 func GetUserByID(id uint) (*models.User, error) {
 	var user models.User
 	result := db.Preload("Posts").First(&user, id)

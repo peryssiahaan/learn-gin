@@ -21,7 +21,8 @@ func main() {
 	r.PUT("/posts/:id", handlers.UpdatePostHandler)
 	r.DELETE("/posts/:id", handlers.DeletePostHandler)
 
-	r.POST("/users", handlers.CreateUserHandler)
+	r.POST("/signup", handlers.SignupHandler)
+	r.POST("/login", handlers.LoginHandler)
 	r.GET("/users/:id", handlers.GetUserHandler)
 	r.PUT("/users/:id", handlers.UpdateUserHandler)
 	r.DELETE("/users/:id", handlers.DeleteUserHandler)
