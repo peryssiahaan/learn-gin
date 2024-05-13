@@ -49,7 +49,7 @@ func SignupHandler(c *gin.Context) {
 		return
 	}
 
-	existingUser, err := database.GetUserByEmail(user.Email)
+	existingUser, _ := database.GetUserByEmail(user.Email)
 	if existingUser != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Email is already in use"})
 		return
