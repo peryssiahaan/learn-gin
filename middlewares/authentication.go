@@ -2,6 +2,7 @@ package middlewares
 
 import (
 	"gin-blog-app/auth"
+	"gin-blog-app/database"
 	"net/http"
 	"strings"
 
@@ -30,6 +31,20 @@ func AuthMiddleWare(ctx *gin.Context) {
 		return
 	}
 
+	user, _ := database.GetUserByEmail(claims.Email)
+	if user == nil {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Not Authenticated!"})
+		ctx.Abort()
+		return
+	}
+
+	if user.Token != parts[1] {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Not Authenticated!"})
+		ctx.Abort()
+		return
+	}
+
 	ctx.Set("username", claims.Username)
+	ctx.Set("email", claims.Email)
 	ctx.Next()
 }

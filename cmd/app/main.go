@@ -5,6 +5,7 @@ import (
 
 	"gin-blog-app/database"
 	"gin-blog-app/handlers"
+	"gin-blog-app/middlewares"
 )
 
 func main() {
@@ -15,17 +16,18 @@ func main() {
 
 	r := gin.Default()
 
-	r.GET("/posts", handlers.GetPostsHandler)
-	r.GET("/posts/:id", handlers.GetPostHandler)
-	r.POST("/posts", handlers.CreatePostHandler)
-	r.PUT("/posts/:id", handlers.UpdatePostHandler)
-	r.DELETE("/posts/:id", handlers.DeletePostHandler)
+	r.GET("/posts", middlewares.AuthMiddleWare, handlers.GetPostsHandler)
+	r.GET("/posts/:id", middlewares.AuthMiddleWare, handlers.GetPostHandler)
+	r.POST("/posts", middlewares.AuthMiddleWare, handlers.CreatePostHandler)
+	r.PUT("/posts/:id", middlewares.AuthMiddleWare, handlers.UpdatePostHandler)
+	r.DELETE("/posts/:id", middlewares.AuthMiddleWare, handlers.DeletePostHandler)
 
 	r.POST("/signup", handlers.SignupHandler)
 	r.POST("/login", handlers.LoginHandler)
-	r.GET("/users/:id", handlers.GetUserHandler)
-	r.PUT("/users/:id", handlers.UpdateUserHandler)
-	r.DELETE("/users/:id", handlers.DeleteUserHandler)
+	r.POST("/logout", middlewares.AuthMiddleWare, handlers.LogOutHandler)
+	r.GET("/users/:id", middlewares.AuthMiddleWare, handlers.GetUserHandler)
+	r.PUT("/users/:id", middlewares.AuthMiddleWare, handlers.UpdateUserHandler)
+	r.DELETE("/users/:id", middlewares.AuthMiddleWare, handlers.DeleteUserHandler)
 
 	r.Run(":8080")
 }

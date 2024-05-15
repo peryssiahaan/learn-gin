@@ -10,15 +10,17 @@ import (
 
 type Claims struct {
 	Username string `json:"username"`
+	Email    string `json:"email"`
 	jwt.StandardClaims
 }
 
 var jwtKey = []byte(os.Getenv("JWT_SECRET"))
 
-func GenerateToken(username string) (string, error) {
+func GenerateToken(username string, email string) (string, error) {
 	expirationTime := time.Now().Add(24 * time.Hour)
 	claims := &Claims{
 		Username: username,
+		Email:    email,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},

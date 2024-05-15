@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -11,6 +12,11 @@ import (
 )
 
 func GetPostsHandler(c *gin.Context) {
+	value, isExist := c.Get("username")
+	if isExist {
+		fmt.Println(value)
+	}
+
 	posts, err := database.GetPosts()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

@@ -27,7 +27,7 @@ func LoginHandler(c *gin.Context) {
 		return
 	}
 
-	token, err := auth.GenerateToken(existingUser.Username)
+	token, err := auth.GenerateToken(existingUser.Username, existingUser.Email)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
 		return
@@ -70,4 +70,30 @@ func SignupHandler(c *gin.Context) {
 
 	// Return the token in the response
 	c.JSON(http.StatusOK, user)
+}
+
+func LogOutHandler(c *gin.Context) {
+	email, _ := c.Get("email")
+
+	user, err := database.GetUserByEmail(email.(string))
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to find user"})
+		return
+	}
+
+	if user == nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Try to log out unknown user"})
+		return
+	}
+
+	user.Token = ""
+
+	if err := database.UpdateUser(user); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to clear user token"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Logout succesful"})
+
 }
